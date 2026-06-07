@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🍞 Welcome to BREAD CLICKER 2000!! 🍞</title>
+    <style>
+        /* 2000s Retro Web Aesthetic */
+        body {
+            background-color: #008080; 
+            font-family: "Times New Roman", Times, serif;
+            color: #000000;
+            margin: 20px;
+            text-align: center;
+        }
+
+        #marquee-container {
+            background-color: #ff00ff;
+            color: #ffffff;
+            font-weight: bold;
+            padding: 5px;
+            border: 3px outset #ff00ff;
+            margin-bottom: 20px;
+        }
+
+        #main-window, .shop-window {
+            background-color: #c0c0c0; 
+            border: 4px outset #ffffff;
+            width: 450px;
+            margin: 0 auto 20px auto;
+            padding: 15px;
+            box-shadow: 5px 5px 0px #000000;
+        }
+
+        .window-title {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 3px;
+            font-weight: bold;
+            text-align: left;
+            margin-top: -15px;
+            margin-left: -15px;
+            margin-right: -15px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        h1 {
+            color: #0000ff;
+            text-shadow: 2px 2px #ffff00;
+            font-size: 28px;
+            margin: 10px 0;
+        }
+
+        .stats-box {
+            background-color: #ffffff;
+            border: 3px inset #808080;
+            padding: 10px;
+            margin: 15px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Just the Bread Emoji Button */
+        #bread-btn {
+            background: none;
+            border: none;
+            font-size: 100px;
+            cursor: pointer;
+            outline: none;
+            user-select: none;
+            transition: transform 0.05s;
+            display: inline-block;
+            margin: 15px 0;
+        }
+
+        #bread-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Password Field Styling */
+        .password-container {
+            margin-top: 15px;
+            padding: 10px;
+            border-top: 2px dashed #808080;
+        }
+        .password-container input {
+            font-family: monospace;
+            padding: 3px;
+            border: 2px inset #ffffff;
+        }
+        .password-container button {
+            background-color: #c0c0c0;
+            border: 2px outset #ffffff;
+            cursor: pointer;
+        }
+
+        /* Shop Upgrade Button */
+        .shop-btn {
+            background-color: #e0e0e0;
+            border: 2px outset #ffffff;
+            padding: 5px 10px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .shop-btn:active {
+            border: 2px inset #ffffff;
+        }
+
+        footer {
+            margin-top: 25px;
+            font-size: 12px;
+        }
+
+        .counter {
+            background-color: black;
+            color: #00ff00;
+            padding: 2px 6px;
+            font-family: monospace;
+            border: 1px solid #808080;
+        }
+
+        /* Glitch Animation */
+        @keyframes glitch {
+            0% { background-color: #ff0000; filter: invert(1); }
+            20% { background-color: #00ff00; }
+            40% { background-color: #0000ff; }
+            60% { background-color: #ffff00; }
+            80% { background-color: #ff00ff; filter: invert(0); }
+            100% { background-color: #00ffff; }
+        }
+
+        .bugging-out {
+            animation: glitch 0.1s infinite !important;
+        }
+
+        /* Black screen container hidden by default */
+        #black-screen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000000;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .video-box {
+            width: 640px;
+            max-width: 90%;
+            background-color: #000000;
+        }
+
+        /* SECRET WHITE CANVAS SCREEN */
+        #secret-white-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+            color: #000000;
+            z-index: 10000;
+            overflow-y: auto;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .image-slot {
+            width: 250px;
+            height: 250px;
+            border: 3px dashed #808080;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #808080;
+            font-weight: bold;
+        }
+
+        .image-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-wrapper">
+        <div id="marquee-container">
+            <marquee scrollamount="5">!!! WELCOME TO THE ULTIMATE BREAD CLICKER HOMEPAGE !!! HEY HO LET'S GO !!!</marquee>
+        </div>
+
+        <div id="main-window">
+            <div class="window-title">🥪 BreadClickerV5.0.exe</div>
+            
+            <h1>LETS GET THIS BREAD!</h1>
+            <p><i>Goal: Reach 12 Slices... If you can survive the 10% glitch rate!</i></p>
+            
+            <div class="stats-box">
+                Clicks: <span id="click-count">0</span> / 10<br>
+                Slices: <span id="slice-count">0</span> / 12
+            </div>
+
+            <button id="bread-btn" onclick="clickBread()">🍞</button>
+
+            <div class="password-container">
+                <label for="pass-input" style="font-size: 12px; font-weight: bold; display: block; margin-bottom: 5px;">ENTER ACCESS CODE:</label>
+                <input type="password" id="pass-input" placeholder="********">
+                <button onclick="checkPassword()">OK</button>
+            </div>
+        </div>
+
+        <div class="shop-window">
+            <div class="window-title">💰 Upgrades_Shop.cfg</div>
+            <h3>Bakery Upgrades</h3>
+            <p>Auto-Clickers automatically generate clicks every second!</p>
+            <p>Owned: <span id="auto-count">0</span></p>
+            <button class="shop-btn" id="buy-btn" onclick="buyAutoClicker()">Buy Auto-Clicker (Cost: 1 Slice)</button>
+        </div>
+
+        <footer>
+            <p>Best viewed in Netscape Navigator at 800x600 resolution</p>
+            <p>YOU ARE VISITOR NUMBER: <span class="counter">00042069</span></p>
+            <p><img src="https://web.archive.org/web/20090830050553im_/http://geocities.com/Hollywood/Hills/2234/ie_animated.gif" alt="IE logo" width="88" height="31"> <img src="https://web.archive.org/web/20091027082349im_/http://geocities.com/SiliconValley/Way/1400/notepad.gif" alt="Made with Notepad" width="88" height="31"></p>
+        </footer>
+    </div>
+
+    <div id="black-screen-overlay">
+        <div class="video-box">
+            <iframe id="endgame-video" width="100%" height="360" src="https://www.youtube.com/embed/3CfYgpj4kAQ?enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div id="secret-white-screen">
+        <h1>🔓 SECRET SYSTEM GALLERY Unlocked</h1>
+        <p>Replace the "src" text in the code with real image web URLs to display photos here!</p>
+        <button onclick="location.reload()" style="padding: 5px 15px; font-weight: bold; cursor: pointer;">← Go Back to Game</button>
+        
+        <div class="image-gallery">
+            <div class="image-slot">
+                <img src="YOUR_IMAGE_URL_1.jpg" alt="[Image Slot 1]" onerror="this.style.display='none'">
+                <span>No Image Loaded</span>
+            </div>
+            <div class="image-slot">
+                <img src="YOUR_IMAGE_URL_2.jpg" alt="[Image Slot 2]" onerror="this.style.display='none'">
+                <span>No Image Loaded</span>
+            </div>
+            <div class="image-slot">
+                <img src="YOUR_IMAGE_URL_3.jpg" alt="[Image Slot 3]" onerror="this.style.display='none'">
+                <span>No Image Loaded</span>
+            </div>
+            <div class="image-slot">
+                <img src="YOUR_IMAGE_URL_4.jpg" alt="[Image Slot 4]" onerror="this.style.display='none'">
+                <span>No Image Loaded</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let clicks = 0;
+        let slices = 0;
+        let autoClickers = 0;
+        const targetSlices = 12;
+        let isGlitching = false;
+
+        // Core Game Loop running constantly in the background (every 100ms)
+        setInterval(function() {
+            gameLoop();
+        }, 100);
+
+        // Separate Loop specifically handling the Auto-Clicker timers (every 1 second)
+        setInterval(function() {
+            if (autoClickers > 0 && !isGlitching && slices < targetSlices) {
+                // Each auto-clicker adds 1 click per second
+                for (let i = 0; i < autoClickers; i++) {
+                    processClick();
+                }
+            }
+        }, 1000);
+
+        function gameLoop() {
+            // Checks to see if the standard win condition has been reached
+            if (slices >= targetSlices && !isGlitching) {
+                triggerBugOut();
+            }
+        }
+
+        function clickBread() {
+            if (slices >= targetSlices || isGlitching) return; 
+            processClick();
+        }
+
+        function processClick() {
+            clicks++;
+
+            if (clicks >= 10) {
+                clicks = 0; 
+                slices++;   
+
+                // Roll a 10% random chance to bug out early every time a slice is earned
+                let randomRoll = Math.random(); // Generates a decimal number between 0 and 1
+                if (randomRoll <= 0.10) { 
+                    triggerBugOut();
+                }
+            }
+
+            // Keep text displays updated
+            document.getElementById("click-count").innerText = clicks;
+            document.getElementById("slice-count").innerText = slices;
+        }
+
+        // Upgrades system functions
+        function buyAutoClicker() {
+            if (slices >= 1) {
+                slices--; // Deduct cost
+                autoClickers++; // Add upgrade
+                document.getElementById("slice-count").innerText = slices;
+                document.getElementById("auto-count").innerText = autoClickers;
+            } else {
+                alert("You need at least 1 Slice of bread to buy an Auto-Clicker!");
+            }
+        }
+
+        // Password system function
+        function checkPassword() {
+            const enteredPass = document.getElementById("pass-input").value;
+            if (enteredPass === "qa68qa68") {
+                // Wipe the game layout out entirely and show the secret gallery
+                document.getElementById("game-wrapper").style.display = "none";
+                document.getElementById("black-screen-overlay").style.display = "none";
+                document.getElementById("secret-white-screen").style.display = "block";
+            } else {
+                alert("ACCESS DENIED: Invalid Password!");
+            }
+        }
+
+        function triggerBugOut() {
+            if (isGlitching) return;
+            isGlitching = true;
+            
+            document.body.classList.add("bugging-out");
+
+            setTimeout(function() {
+                document.body.classList.remove("bugging-out");
+                document.getElementById("game-wrapper").style.display = "none";
+                
+                const overlay = document.getElementById("black-screen-overlay");
+                overlay.style.display = "flex";
+                
+                const iframe = document.getElementById("endgame-video");
+                iframe.src += "&autoplay=1";
+            }, 2000);
+        }
+    </script>
+
+</body>
+</html>
