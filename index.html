@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>🍞 BREAD SYSTEM 2000: THE ULTIMATE EMPIRE OS v10.0 🍞</title>
+    <style>
+        body {
+            background-color: #3a6ea5; 
+            font-family: "Times New Roman", Times, serif;
+            color: #000000;
+            margin: 0;
+            padding: 20px;
+            overflow: hidden;
+            user-select: none;
+        }
+
+        #desktop-banner {
+            background-color: #ff00ff;
+            color: #ffffff;
+            font-weight: bold;
+            padding: 6px;
+            border: 3px outset #ff00ff;
+            margin-bottom: 15px;
+            box-shadow: 3px 3px 0px #000000;
+        }
+
+        /* Draggable Windows */
+        .window {
+            background-color: #c0c0c0; 
+            border: 4px outset #ffffff;
+            position: absolute;
+            box-shadow: 6px 6px 0px #000000;
+            padding: 12px;
+            box-sizing: border-box;
+            z-index: 5;
+        }
+
+        #main-window { width: 420px; top: 80px; left: 20px; }
+        #shop-window { width: 420px; top: 80px; left: 460px; }
+        #stock-window { width: 420px; top: 480px; left: 20px; }
+        #achieve-window { width: 420px; top: 510px; left: 460px; }
+        #factory-window { width: 460px; top: 80px; left: 900px; display: none; border: 4px outset goldenrod; }
+        #override-window { width: 480px; top: 200px; left: 350px; display: none; border: 4px inset red; z-index: 50; }
+        
+        /* 3 New Gameplay Windows */
+        #silo-window { width: 320px; top: 380px; left: 900px; }
+        #ads-window { width: 320px; top: 560px; left: 900px; }
+        #bakery-window { width: 420px; top: 660px; left: 460px; }
+
+        .window-title {
+            background: linear-gradient(90deg, #000080, #1084d0);
+            color: white;
+            padding: 4px 8px;
+            font-weight: bold;
+            text-align: left;
+            margin-top: -12px;
+            margin-left: -12px;
+            margin-right: -12px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            cursor: move;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .min-btn {
+            background-color: #c0c0c0;
+            color: black;
+            border: 2px outset #ffffff;
+            font-size: 10px;
+            padding: 1px 4px;
+            cursor: pointer;
+            font-family: monospace;
+            font-weight: bold;
+        }
+        .min-btn:active { border: 2px inset #ffffff; }
+
+        h1 { color: #0000ff; text-shadow: 2px 2px #ffff00; font-size: 22px; margin: 5px 0; }
+        h3 { margin: 8px 0 4px 0; color: #800000; border-bottom: 2px solid #808080; font-size: 14px; }
+
+        .stats-box {
+            background-color: #ffffff;
+            border: 3px inset #808080;
+            padding: 8px;
+            margin: 8px 0;
+            font-family: "Courier New", Courier, monospace;
+            font-size: 13px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        #bread-btn {
+            background: none;
+            border: none;
+            font-size: 80px;
+            cursor: pointer;
+            outline: none;
+            transition: transform 0.05s;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        #bread-btn:active { transform: scale(0.85); }
+
+        .shop-container { max-height: 240px; overflow-y: auto; padding-right: 5px; }
+
+        .shop-section {
+            background: #e0e0e0;
+            border: 2px inset #ffffff;
+            padding: 6px;
+            margin-bottom: 8px;
+            text-align: left;
+            font-size: 12px;
+        }
+        .premium-shop { border: 2px dashed #b8860b; background: #fffdf0; }
+        .factory-shop { border: 2px solid red; background: #ffe6e6; }
+
+        .shop-btn {
+            background-color: #c0c0c0;
+            border: 2px outset #ffffff;
+            padding: 2px 4px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 4px;
+            display: block;
+            width: 100%;
+            font-size: 11px;
+        }
+        .shop-btn:active { border: 2px inset #ffffff; }
+        .shop-btn:disabled { color: #808080; cursor: not-allowed; background: #dcdcdc !important; }
+
+        .terminal {
+            background-color: #000000;
+            color: #00ff00;
+            font-family: "Courier New", Courier, monospace;
+            padding: 6px;
+            height: 80px;
+            overflow-y: auto;
+            border: 3px inset #808080;
+            text-align: left;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        .battle-arena {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #111;
+            padding: 8px;
+            border: 2px inset #555;
+            margin-top: 6px;
+        }
+        .fighter { font-size: 32px; text-align: center; }
+        .fighter-label { font-size: 10px; color: #fff; font-family: monospace; }
+
+        /* Taskbar Layout */
+        #taskbar {
+            position: fixed;
+            bottom: 0; left: 0; width: 100%; height: 30px;
+            background-color: #c0c0c0; border-top: 3px outset #ffffff;
+            z-index: 999; display: flex; align-items: center; padding-left: 5px;
+        }
+        .start-button {
+            background-color: #bfbfbf; font-weight: bold; font-style: italic;
+            border: 2px outset #ffffff; padding: 2px 8px; box-shadow: 1px 1px 0px #000;
+        }
+        .taskbar-clock {
+            margin-left: auto; margin-right: 15px; border: 2px inset #ffffff;
+            padding: 2px 6px; background: #e0e0e0; font-family: monospace; font-size: 12px;
+        }
+
+        /* Specific Action Interventions */
+        #sell-win-btn {
+            display: none;
+            background-color: #00ff00;
+            color: #000;
+            border: 2px outset #fff;
+            font-weight: bold;
+            padding: 2px 6px;
+            cursor: pointer;
+            margin-left: 10px;
+            animation: blink 0.5s infinite alternate;
+        }
+        @keyframes blink { from { opacity: 0.3; } to { opacity: 1; } }
+
+        #win-screen {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle, #ff00ff, #000080); color: white;
+            z-index: 20000; text-align: center; padding-top: 100px;
+        }
+
+        #virus-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-color: rgba(255, 0, 0, 0.2); pointer-events: none; z-index: 15000;
+        }
+
+        #black-screen-overlay { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-color: #000000; z-index: 19999; justify-content: center; align-items: center; }
+        
+        .choice-card {
+            background: #d0d0d0; border: 2px outset #fff; padding: 8px; margin-bottom: 10px; text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-wrapper">
+        <div id="desktop-banner">
+            <marquee scrollamount="4">💻 BREAD EMPRE OS v10.0 // OBJECTIVE: HARVEST 600 LOAFS FOR DISTRIBUTION PLATFORM LIQUIDATION 💻</marquee>
+        </div>
+
+        <div id="main-window" class="window">
+            <div class="window-title"><span>🥪 Core_Harvester.exe</span></div>
+            <h1>BREAD ENGINE MULTIVERSE</h1>
+            <div class="stats-box">
+                Clicks: <span id="click-count">0</span> / 10<br>
+                Slices: <span id="slice-count">0</span> / 12<br>
+                Loafs:  <span id="loaf-count">0</span> / 600 
+                <button id="sell-win-btn" onclick="triggerVictory()">SELL?</button><br>
+                Cash: $<span id="cash-count">0</span> | Pet Mouse: <span id="mouse-status">Not Owned</span> 🐭
+            </div>
+            <button id="bread-btn" onclick="clickBread()">🍞</button>
+            <div style="border-top: 2px dashed #808080; padding-top: 6px;">
+                <input type="password" id="pass-input" placeholder="System Code" style="width:110px; font-size:11px;">
+                <button class="min-btn" onclick="checkPassword()">Override</button>
+                <select id="bg-select" onchange="changeWallpaper()" style="font-size:11px; margin-left:10px;">
+                    <option value="#3a6ea5">Default Blue</option>
+                    <option value="#800080">Retro Purple</option>
+                    <option value="#008080">Teal Classic</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="shop-window" class="window">
+            <div class="window-title"><span>💰 Upgrade_Matrix.sys</span><button class="min-btn" onclick="toggleMinimize('shop-content', this)">_</button></div>
+            <div id="shop-content" class="shop-container">
+                <h3>Slices Storefront</h3>
+                <div class="shop-section">
+                    <strong>Auto-Slicer V1</strong> (Adds automated input loops)<br>
+                    Count: <span id="auto-count">0</span> / 10 (MAX)<br>
+                    <button class="shop-btn" id="auto-btn" onclick="buyAutoClicker()">Buy Upgrade (1 Slice)</button>
+                </div>
+                <div class="shop-section">
+                    <strong>Dough Kneader</strong> (Permanent +1 weight to active clicks)<br>
+                    Count: <span id="kneader-count">0</span><br>
+                    <button class="shop-btn" onclick="buyDoughKneader()">Buy Upgrade (3 Slices)</button>
+                </div>
+                <div class="shop-section">
+                    <strong>Export Agent</strong> (Liquidate Slices to direct cash assets)<br>
+                    <button class="shop-btn" onclick="sellSlicesForCash()">Sell 6 Slices (Yields $50)</button>
+                </div>
+
+                <h3>Loaf Storefront</h3>
+                <div class="shop-section premium-shop">
+                    <strong>Golden Crust Matrix</strong> (Active inputs yield double output arrays)<br>
+                    Status: <span id="butter-status">Locked</span>
+                    <button class="shop-btn" id="butter-btn" onclick="buyGoldenButter()">Acquire (1 Loaf)</button>
+                    <div style="margin-top:4px;"></div>
+                    <strong>Nuclear Oven Core</strong> (Automatically processes 1 slice every 2 seconds)<br>
+                    Count: <span id="oven-count">0</span><br>
+                    <button class="shop-btn" onclick="buyIndustrialOven()">Acquire (2 Loafs)</button>
+                    <div style="margin-top:4px;"></div>
+                    <strong>Loaf Venture Capital</strong> (Yields 1 free Loaf every 45 seconds)<br>
+                    Count: <span id="fund-count">0</span><br>
+                    <button class="shop-btn" onclick="buyLoafInvestment()">Acquire (4 Loafs)</button>
+                </div>
+
+                <h3 style="color:red;">🚨 MILITARY UPGRADES 🚨</h3>
+                <div class="shop-section factory-shop">
+                    <strong>Dough Cloning Combat Center</strong><br>
+                    Unlock neural bio-tanks to brew warriors and raid Cake regimes.<br>
+                    Status: <span id="factory-status">Offline</span>
+                    <button class="shop-btn" id="factory-btn" style="background:#ffcccc;" onclick="unlockFactory()">Deploy Core (10 Loafs)</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="stock-window" class="window">
+            <div class="window-title"><span>📈 Market_Ticker.exe</span><button class="min-btn" onclick="toggleMinimize('stock-content', this)">_</button></div>
+            <div id="stock-content">
+                <div class="stats-box" style="background:#f0f8ff;">
+                    Wheat Equity Price: $<span id="stock-price">10</span> per share<br>
+                    Shares Held: <span id="stock-held">0</span>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button class="shop-btn" onclick="buyWheatStock()">Buy Share</button>
+                    <button class="shop-btn" onclick="sellWheatStock()">Sell All</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="achieve-window" class="window">
+            <div class="window-title"><span>🏆 Trophies.dat</span><button class="min-btn" onclick="toggleMinimize('achieve-content', this)">_</button></div>
+            <div id="achieve-content" style="font-size:12px; text-align:left;">
+                <div id="ach-1" style="color:#555;">❌ [First Steps] - Earn 1 Slice</div>
+                <div id="ach-2" style="color:#555;">❌ [Commercial Success] - Secure $500 Liquid cash</div>
+            </div>
+        </div>
+
+        <div id="silo-window" class="window">
+            <div class="window-title"><span>🌾 Silo_Storage.sys</span><button class="min-btn" onclick="toggleMinimize('silo-content', this)">_</button></div>
+            <div id="silo-content" style="font-size:12px;">
+                <p>Lease storage slots to maximize processing performance multipliers.</p>
+                <div class="stats-box">Silo Capacity Modifier: +<span id="silo-mod">0</span>%</div>
+                <button class="shop-btn" onclick="upgradeSilo()">Expand Storage Space (Costs $100)</button>
+            </div>
+        </div>
+
+        <div id="ads-window" class="window">
+            <div class="window-title"><span>🌐 Network_Promo.cfg</span><button class="min-btn" onclick="toggleMinimize('ads-content', this)">_</button></div>
+            <div id="ads-content" style="font-size:12px;">
+                <p>Deploy banner marketing campaigns across old internet lines to push valuation metrics.</p>
+                <div class="stats-box">Active Ad Banners: <span id="ads-count">0</span></div>
+                <button class="shop-btn" onclick="buyBannerAd()">Launch Banner Ad Campaign (Costs $150)</button>
+            </div>
+        </div>
+
+        <div id="bakery-window" class="window">
+            <div class="window-title"><span>🔥 Advanced_Bakery.exe</span><button class="min-btn" onclick="toggleMinimize('bakery-content', this)">_</button></div>
+            <div id="bakery-content" style="font-size:12px;">
+                <p>Bake complex confectionery to unlock sudden direct resource infusions.</p>
+                <button class="shop-btn" onclick="bakeSpecialty('baguette')">Bake Baguette (Requires 20 Slices -> Yields $200 Cash)</button>
+                <button class="shop-btn" onclick="bakeSpecialty('croissant')">Bake Croissant (Requires 50 Slices -> Yields 3 Loafs)</button>
+            </div>
+        </div>
+
+        <div id="factory-window" class="window">
+            <div class="window-title"><span>🏭 Bread_Man_Biotech.exe</span><button class="min-btn" onclick="toggleMinimize('factory-content', this)">_</button></div>
+            <div id="factory-content">
+                <div class="stats-box" style="background:#f4f4f4;">
+                    Active Clones: <span id="clones-count">0</span> 🍞 | Combat Level: Lv. <span id="factory-level">1</span><br>
+                    Campaign Victories: <span id="victory-count">0</span>
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button class="shop-btn" style="margin:0;" onclick="spawnBreadMan()">Clone (1 Loaf)</button>
+                    <button class="shop-btn" style="margin:0;" onclick="trainBreadMan()">Train (2 Loafs)</button>
+                </div>
+                <button class="shop-btn" id="battle-btn" style="background:orange; margin-top:6px;" onclick="startCakeFight()">DEPLOY WARRIOR ⚔️</button>
+                <div class="battle-arena">
+                    <div><div class="fighter-label" id="p1-hp">HP: --</div><div class="fighter" id="p1-sprite">❓</div></div>
+                    <div style="color:red; font-weight:bold;">VS</div>
+                    <div><div class="fighter-label" id="p2-hp">HP: --</div><div class="fighter" id="p2-sprite">❓</div><div class="fighter-label" id="p2-name" style="color:yellow;">Target</div></div>
+                </div>
+                <div class="terminal" id="factory-log">&gt; Facility online... awaiting soldier creation loop...<br></div>
+            </div>
+        </div>
+
+        <div id="override-window" class="window">
+            <div class="window-title"><span style="color:yellow;">🔒 CRITICAL CONTROL OVERRIDE DECK</span></div>
+            <p style="font-size:12px; margin: 0 0 10px 0;">Select one process string execution protocol to apply directly to kernel logic:</p>
+            
+            <div class="choice-card">
+                <strong>[Protocol A]: Loaf Multiplier Prestige</strong><br>
+                <span style="font-size:11px; color:#444;">Dumps 600 Loafs to unlock an absolute 5x overall performance generator matrix multiplier.</span>
+                <button class="shop-btn" style="background:#00ff00;" onclick="selectProtocolA()">Execute Prestige Sequence</button>
+            </div>
+
+            <div class="choice-card">
+                <strong>[Protocol B]: Primary System Shunt Lever</strong><br>
+                <span style="font-size:11px; color:#444;">Flick a physical logic bridge lever. Label says: 'Do not pull during active compile operations'.</span>
+                <button class="shop-btn" style="background:#ff3333; color:white;" onclick="selectProtocolB()">Flick System Bridge Lever</button>
+            </div>
+
+            <div class="choice-card">
+                <strong>[Protocol C]: Companion Neural Input Interface</strong><br>
+                <span style="font-size:11px; color:#444;">Deploys a permanent local companion helper Pet Mouse (🐭) to assist with click throughput loops.</span>
+                <button class="shop-btn" style="background:#3333ff; color:white;" onclick="selectProtocolC()">Instantiate Mouse Assistant</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="virus-overlay"></div>
+    <div id="black-screen-overlay"><div class="video-box"><iframe id="endgame-video" width="580" height="320" src="https://www.youtube.com/embed/3CfYgpj4kAQ?enablejsapi=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe></div></div>
+    
+    <div id="win-screen">
+        <h1 style="color:#fff; font-size:40px; text-shadow:3px 3px #000;">👑 VICTORY ACHIEVED! 👑</h1>
+        <p style="font-size:20px; font-weight:bold;">You successfully completed liquidation transactions for 600 Loafs!</p>
+        <p style="font-family:monospace; margin-top:40px;">BREAD EMPIRE OS ENTERPRISE WORKSTATION COMPLETE // SAVED SUCCESS</p>
+        <button class="shop-btn" style="width:150px; margin:20px auto; padding:10px;" onclick="location.reload()">Restart System</button>
+    </div>
+
+    <div id="taskbar"><div class="start-button">🍞 Start</div><div style="margin-left:10px; font-size:11px; color:#444;">Active Kernel: v10.0_Stable_Release</div><div class="taskbar-clock">03:31 AM</div></div>
+
+    <script>
+        // Currency Core Values
+        let clicks = 0, slices = 0, loafs = 0, cash = 0;
+        let prestigeMultiplier = 1;
+
+        // Inventory Metric Trackers
+        let autoClickers = 0, industrialOvens = 0, doughKneaders = 0, loafFunds = 0;
+        let hasGoldenButter = false, sharePrice = 10, sharesHeld = 0;
+        let factoryUnlocked = false, hasPetMouse = false;
+
+        // Custom Metric Infrastructure Channels
+        let siloCapacityMod = 0, bannerAdsCount = 0;
+
+        // Fight System Configurations
+        let breadClones = 0, factoryLevel = 1, arenaWins = 0, combatActive = false;
+
+        // Virus Infection Simulation Vectors
+        let virusActive = false, virusTimer = null, virusErosionStage = 0;
+
+        // Engine Clock Process Loops
+        setInterval(() => {
+            if (loafs >= 600) {
+                document.getElementById("sell-win-btn").style.display = "inline-block";
+            } else {
+                document.getElementById("sell-win-btn").style.display = "none";
+            }
+        }, 2000);
+
+        setInterval(() => {
+            if (autoClickers > 0) {
+                let gain = autoClickers * prestigeMultiplier;
+                for(let i=0; i<gain; i++) processClick(1);
+            }
+        }, 1000);
+
+        setInterval(() => {
+            if (industrialOvens > 0) {
+                let slicesToAdd = industrialOvens * prestigeMultiplier;
+                for(let i=0; i<slicesToAdd; i++) addSlice();
+            }
+        }, 2000);
+
+        setInterval(() => {
+            if (loafFunds > 0) {
+                loafs += (loafFunds * prestigeMultiplier);
+                updateDisplay();
+            }
+        }, 45000);
+
+        // Pet Mouse Automated Interaction Generator Loop (Simulates helper mouse clicks every 500ms)
+        setInterval(() => {
+            if (hasPetMouse) {
+                let power = 1 + doughKneaders;
+                if (hasGoldenButter) power *= 2;
+                processClick(power);
+            }
+        }, 500);
+
+        // Realtime Stock Pricing Simulation Loop
+        setInterval(() => {
+            let shift = Math.floor(Math.random() * 7) - 3;
+            sharePrice = Math.max(3, sharePrice + shift + Math.floor(bannerAdsCount * 0.5));
+            document.getElementById("stock-price").innerText = sharePrice;
+        }, 4000);
+
+        function clickBread() {
+            let power = 1 + doughKneaders;
+            if (hasGoldenButter) power *= 2;
+            processClick(power);
+        }
+
+        function processClick(amt) {
+            clicks += amt;
+            if (clicks >= 10) { clicks -= 10; addSlice(); }
+            updateDisplay();
+        }
+
+        function addSlice() {
+            let increment = 1;
+            if (siloCapacityMod > 0 && Math.random() < (siloCapacityMod / 100)) {
+                increment = 2; // Storage performance double slice chance triggering
+            }
+            slices += increment;
+            checkAchievements();
+            if (slices >= 12) { slices -= 12; loafs++; }
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            document.getElementById("click-count").innerText = clicks;
+            document.getElementById("slice-count").innerText = slices;
+            document.getElementById("loaf-count").innerText = loafs;
+            document.getElementById("cash-count").innerText = cash;
+            document.getElementById("stock-held").innerText = sharesHeld;
+            document.getElementById("clones-count").innerText = breadClones;
+            document.getElementById("factory-level").innerText = factoryLevel;
+            document.getElementById("victory-count").innerText = arenaWins;
+            document.getElementById("auto-count").innerText = autoClickers;
+            document.getElementById("kneader-count").innerText = doughKneaders;
+            document.getElementById("fund-count").innerText = loafFunds;
+            document.getElementById("silo-mod").innerText = siloCapacityMod;
+            document.getElementById("ads-count").innerText = bannerAdsCount;
+            document.getElementById("mouse-status").innerText = hasPetMouse ? "Active Assistant" : "Not Owned";
+        }
+
+        // Store Logic Purchases
+        function buyAutoClicker() {
+            if (autoClickers >= 10) return;
+            if (slices >= 1) { slices--; autoClickers++; if(autoClickers >= 10) document.getElementById("auto-btn").disabled = true; updateDisplay(); }
+        }
+        function buyDoughKneader() { if (slices >= 3) { slices -= 3; doughKneaders++; updateDisplay(); } }
+        function sellSlicesForCash() { if (slices >= 6) { slices -= 6; cash += 50; checkAchievements(); updateDisplay(); } }
+        function buyGoldenButter() { if (loafs >= 1 && !hasGoldenButter) { loafs--; hasGoldenButter = true; updateDisplay(); document.getElementById("butter-status").innerText = "Active"; document.getElementById("butter-btn").disabled = true; } }
+        function buyIndustrialOven() { if (loafs >= 2) { loafs -= 2; industrialOvens++; updateDisplay(); } }
+        function buyLoafInvestment() { if (loafs >= 4) { loafs -= 4; loafFunds++; updateDisplay(); } }
+
+        // Module 1 Infrastructure Expansion Systems
+        function upgradeSilo() {
+            if (cash >= 100) { cash -= 100; siloCapacityMod += 15; updateDisplay(); }
+            else { alert("Insufficient liquid funds!"); }
+        }
+
+        // Module 2 Performance Interventions
+        function buyBannerAd() {
+            if (cash >= 150) { cash -= 150; bannerAdsCount++; updateDisplay(); }
+            else { alert("Insufficient liquid funds!"); }
+        }
+
+        // Module 3 Advanced Processing Systems
+        function bakeSpecialty(item) {
+            if (item === 'baguette' && slices >= 20) { slices -= 20; cash += 200; updateDisplay(); }
+            else if (item === 'croissant' && slices >= 50) { slices -= 50; loafs += 3; updateDisplay(); }
+            else { alert("Insufficient processing materials inside raw slice pool storage matrix!"); }
+        }
+
+        // Equity Exchange Processing Loops
+        function buyWheatStock() { if (cash >= sharePrice) { cash -= sharePrice; sharesHeld++; updateDisplay(); } }
+        function sellWheatStock() { if (sharesHeld > 0) { cash += (sharesHeld * sharePrice); sharesHeld = 0; checkAchievements(); updateDisplay(); } }
+
+        function checkAchievements() {
+            if (slices >= 1) { document.getElementById("ach-1").style.color = "green"; document.getElementById("ach-1").innerText = "✅ [First Steps] - Unlocked"; }
+            if (cash >= 500) { document.getElementById("ach-2").style.color = "green"; document.getElementById("ach-2").innerText = "✅ [Commercial Success] - Unlocked"; }
+        }
+
+        // Victory Endpoint Execution Routine
+        function triggerVictory() {
+            if (loafs >= 600) {
+                document.getElementById("game-wrapper").style.display = "none";
+                document.getElementById("win-screen").style.display = "block";
+            }
+        }
+
+        // Override Console Decision Interfaces
+        function checkPassword() {
+            if (document.getElementById("pass-input").value === "qa68qa68") {
+                document.getElementById("override-window").style.display = "block";
+            } else { alert("Invalid access privileges!"); }
+        }
+
+        function selectProtocolA() {
+            if (loafs >= 600) {
+                loafs -= 600; prestigeMultiplier = 5;
+                document.getElementById("override-window").style.display = "none";
+                updateDisplay();
+                alert("Protocol sequence loaded. Overall system multipliers boosted 5x.");
+            } else { alert("Prestige parameters require 600 Loafs available in storage pool memory lines!"); }
+        }
+
+        function selectProtocolC() {
+            hasPetMouse = true;
+            document.getElementById("override-window").style.display = "none";
+            updateDisplay();
+            alert("Instantiated Mouse Interface element helper successfully.");
+        }
+
+        // Lever Triggered Trojan Simulation Logic Chain
+        function selectProtocolB() {
+            if (virusActive) return;
+            virusActive = true;
+            document.getElementById("override-window").style.display = "none";
+            document.getElementById("virus-overlay").style.display = "block";
+            
+            virusTimer = setInterval(() => {
+                virusErosionStage++;
+                
+                // Gradually siphon away all operational metrics
+                cash = Math.max(0, Math.floor(cash * 0.7));
+                slices = Math.max(0, Math.floor(slices * 0.7));
+                loafs = Math.max(0, Math.floor(loafs * 0.7));
+                updateDisplay();
+
+                if (virusErosionStage >= 8) {
+                    clearInterval(virusTimer);
+                    executeTotalCrash();
+                }
+            }, 1500);
+        }
+
+        function executeTotalCrash() {
+            document.getElementById("game-wrapper").style.display = "none";
+            document.getElementById("virus-overlay").style.display = "none";
+            document.getElementById("black-screen-overlay").style.display = "flex";
+            document.getElementById("endgame-video").src += "&autoplay=1";
+        }
+
+        // Factory Subroutines
+        function unlockFactory() {
+            if (loafs >= 10 && !factoryUnlocked) {
+                loafs -= 10; factoryUnlocked = true; updateDisplay();
+                document.getElementById("factory-status").innerText = "ONLINE";
+                document.getElementById("factory-btn").disabled = true;
+                document.getElementById("factory-window").style.display = "block";
+            }
+        }
+        function spawnBreadMan() { if (loafs >= 1) { loafs--; breadClones++; updateDisplay(); } }
+        function trainBreadMan() { if (loafs >= 2) { loafs -= 2; factoryLevel++; updateDisplay(); } }
+
+        function startCakeFight() {
+            if (combatActive || breadClones < 1) return;
+            combatActive = true; document.getElementById("battle-btn").disabled = true;
+            breadClones--; updateDisplay();
+
+            const enemies = [
+                { name: "Cupcake Scout 🧁", hp: 15, atk: 3, sprite: "🧁" },
+                { name: "Spongecake Knight 🍰", hp: 35, atk: 5, sprite: "🍰" },
+                { name: "Emperor Wedding Cake 🎂", hp: 70, atk: 9, sprite: "🎂" }
+            ];
+            let enemy = { ...enemies[Math.min(arenaWins, enemies.length - 1)] };
+            let pHP = 10 + (factoryLevel * 10), pAtk = 2 + (factoryLevel * 3);
+
+            document.getElementById("p1-sprite").innerText = "🍞";
+            document.getElementById("p2-sprite").innerText = enemy.sprite;
+            document.getElementById("p2-name").innerText = enemy.name;
+
+            let fight = setInterval(() => {
+                enemy.hp -= (Math.floor(Math.random() * pAtk) + 1);
+                if(enemy.hp <= 0) { clearInterval(fight); loafs += 2; arenaWins++; finishFight(); return; }
+                pHP -= (Math.floor(Math.random() * enemy.atk) + 1);
+                document.getElementById("p1-hp").innerText = `HP: ${pHP}`;
+                document.getElementById("p2-hp").innerText = `HP: ${enemy.hp}`;
+                if(pHP <= 0) { clearInterval(fight); finishFight(); }
+            }, 500);
+        }
+        function finishFight() { combatActive = false; document.getElementById("battle-btn").disabled = false; updateDisplay(); }
+
+        function toggleMinimize(id, btn) {
+            const b = document.getElementById(id);
+            if (b.style.display === "none") { b.style.display = "block"; btn.innerText = "_"; }
+            else { b.style.display = "none"; btn.innerText = "▢"; }
+        }
+
+        function changeWallpaper() { document.body.style.backgroundColor = document.getElementById("bg-select").value; }
+
+        // Draggable Framework Orchestration Engine
+        function applyDraggableOS() {
+            document.querySelectorAll('.window').forEach(win => {
+                const header = win.querySelector('.window-title');
+                let dragging = false, ix, iy, ox = 0, oy = 0;
+
+                if(win.id === "main-window") { ox = 20; oy = 80; }
+                if(win.id === "shop-window") { ox = 460; oy = 80; }
+                if(win.id === "stock-window") { ox = 20; oy = 480; }
+                if(win.id === "achieve-window") { ox = 460; oy = 510; }
+                if(win.id === "factory-window") { ox = 900; oy = 80; }
+                if(win.id === "override-window") { ox = 350; oy = 200; }
+                if(win.id === "silo-window") { ox = 900; oy = 380; }
+                if(win.id === "ads-window") { ox = 900; oy = 560; }
+                if(win.id === "bakery-window") { ox = 460; oy = 660; }
+                
+                win.style.transform = `translate3d(${ox}px, ${oy}px, 0)`; win.style.left="0px"; win.style.top="0px";
+
+                header.addEventListener('mousedown', (e) => {
+                    if (e.target.classList.contains('min-btn')) return;
+                    ix = e.clientX - ox; iy = e.clientY - oy; dragging = true;
+                });
+                document.addEventListener('mousemove', (e) => {
+                    if (!dragging) return; e.preventDefault();
+                    ox = e.clientX - ix; oy = e.clientY - iy;
+                    win.style.transform = `translate3d(${ox}px, ${oy}px, 0)`;
+                });
+                document.addEventListener('mouseup', () => dragging = false);
+            });
+        }
+        window.onload = applyDraggableOS;
+    </script>
+</body>
+</html>
